@@ -26,4 +26,4 @@ jobs:
         # This command runs nextron build and uploads to GitHub Releases
         run: npm run build -- --publish always
         env:
-          MEDICAL_TOKEN: ${{ secrets.MEDICAL_TOKEN }} # Uses the token you added to Secrets
+          GH_TOKEN: ${{ secrets.MEDICAL_TOKEN }} # Uses the token you added to Secrets
