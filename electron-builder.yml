@@ -9,4 +9,8 @@ files:
     filter:
       - package.json
       - app
-publish: null
+# UPDATE THIS SECTION TO MATCH PACKAGE.JSON
+publish:
+  provider: github
+  owner: muhamadatif
+  repo: medical-app
