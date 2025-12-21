@@ -1,40 +1,50 @@
-import path from 'path'
-import { app, ipcMain } from 'electron'
-import serve from 'electron-serve'
-import { createWindow } from './helpers'
+import path from "path";
+import { app, ipcMain } from "electron";
+import serve from "electron-serve";
+import { createWindow } from "./helpers";
+import { autoUpdater } from "electron-updater";
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === "production";
+// 1. Configure logging (Optional but highly recommended to debug update issues)
+autoUpdater.logger = require("electron-log");
+autoUpdater.logger.transports.file.level = "info";
 
 if (isProd) {
-  serve({ directory: 'app' })
+  serve({ directory: "app" });
 } else {
-  app.setPath('userData', `${app.getPath('userData')} (development)`)
+  app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
-;(async () => {
-  await app.whenReady()
+(async () => {
+  await app.whenReady();
 
-  const mainWindow = createWindow('main', {
+  const mainWindow = createWindow("main", {
     width: 1000,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, "preload.js"),
     },
-  })
+  });
 
   if (isProd) {
-    await mainWindow.loadURL('app://./home')
+    autoUpdater.checkForUpdatesAndNotify();
+
+    await mainWindow.loadURL("app://./home");
   } else {
-    const port = process.argv[2]
-    await mainWindow.loadURL(`http://localhost:${port}/home`)
-    mainWindow.webContents.openDevTools()
+    const port = process.argv[2];
+    await mainWindow.loadURL(`http://localhost:${port}/home`);
+    mainWindow.webContents.openDevTools();
   }
-})()
+})();
 
-app.on('window-all-closed', () => {
-  app.quit()
-})
+autoUpdater.on("update-downloaded", () => {
+  autoUpdater.quitAndInstall();
+});
 
-ipcMain.on('message', async (event, arg) => {
-  event.reply('message', `${arg} World!`)
-})
+app.on("window-all-closed", () => {
+  app.quit();
+});
+
+ipcMain.on("message", async (event, arg) => {
+  event.reply("message", `${arg} World!`);
+});
