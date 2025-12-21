@@ -1,6 +1,6 @@
 appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+productName: Medical App
+copyright: Copyright © 2025 Mohamed Atif
 directories:
   output: dist
   buildResources: resources

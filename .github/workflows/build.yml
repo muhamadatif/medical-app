@@ -1,0 +1,29 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*" # This triggers the build when you push a tag like v1.0.0
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build and Publish
+        # This command runs nextron build and uploads to GitHub Releases
+        run: npm run build -- --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} # Uses the token you added to Secrets
