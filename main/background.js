@@ -28,7 +28,7 @@ if (isProd) {
   });
 
   if (isProd) {
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdates();
 
     await mainWindow.loadURL("app://./home");
   } else {
