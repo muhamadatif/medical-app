@@ -2,7 +2,7 @@
   "private": true,
   "name": "my-nextron-app",
   "description": "A Medical App",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "repository": {
     "type": "git",
     "url": "github.com"
