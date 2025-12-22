@@ -8,6 +8,7 @@ const isProd = process.env.NODE_ENV === "production";
 // 1. Configure logging (Optional but highly recommended to debug update issues)
 autoUpdater.logger = require("electron-log");
 autoUpdater.logger.transports.file.level = "info";
+console.log(app.getVersion());
 
 if (isProd) {
   serve({ directory: "app" });

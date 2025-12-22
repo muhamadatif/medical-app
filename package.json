@@ -2,10 +2,10 @@
   "private": true,
   "name": "my-nextron-app",
   "description": "A Medical App",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "repository": {
     "type": "git",
-    "url": "github.com"
+    "url": "https://github.com/muhamadatif/medical-app.git"
   },
   "author": "mohamed-atif",
   "main": "app/background.js",
