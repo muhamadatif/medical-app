@@ -1,14 +1,10 @@
 import path from "path";
-import { app, ipcMain } from "electron";
+import { app, ipcMain, BrowserWindow } from "electron"; // <-- added BrowserWindow
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import { autoUpdater } from "electron-updater";
 
 const isProd = process.env.NODE_ENV === "production";
-// 1. Configure logging (Optional but highly recommended to debug update issues)
-autoUpdater.logger = require("electron-log");
-autoUpdater.logger.transports.file.level = "info";
-console.log(app.getVersion());
 
 if (isProd) {
   serve({ directory: "app" });
@@ -22,6 +18,7 @@ if (isProd) {
   const mainWindow = createWindow("main", {
     width: 1000,
     height: 600,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -29,7 +26,6 @@ if (isProd) {
 
   if (isProd) {
     autoUpdater.checkForUpdates();
-
     await mainWindow.loadURL("app://./home");
   } else {
     const port = process.argv[2];
@@ -46,6 +42,21 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
-ipcMain.on("message", async (event, arg) => {
-  event.reply("message", `${arg} World!`);
+// IPC handlers
+ipcMain.on("minimize", () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) win.minimize();
+});
+
+ipcMain.on("maximize", () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) {
+    if (win.isMaximized()) win.unmaximize();
+    else win.maximize();
+  }
+});
+
+ipcMain.on("close", () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) win.close();
 });
